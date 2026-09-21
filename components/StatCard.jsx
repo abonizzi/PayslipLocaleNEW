@@ -1,5 +1,13 @@
 "use client";
 
+/**
+ * Buste Paga PWA
+ * (c) 2026 Andrea Bonizzi. Tutti i diritti riservati / All Rights Reserved.
+ * Codice proprietario: copia, distribuzione, modifica o riutilizzo non
+ * autorizzati, totali o parziali, sono vietati senza consenso scritto
+ * dell'autore. Vedi il file LICENSE nella radice del progetto.
+ */
+
 export default function StatCard({ icon: Icon, label, value, sub, accent }) {
   return (
     <div className="rounded-2xl border border-base-700 bg-base-900 p-4 flex flex-col gap-1 min-w-0">

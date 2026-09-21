@@ -110,3 +110,9 @@ netlify.toml
 ## Nota
 
 Il modello usato per l'estrazione è `gemini-3.6-flash`; per cambiarlo modifica la costante `GEMINI_MODEL` in `app/api/parse-payslip/route.js`.
+
+## Licenza
+
+Codice proprietario — © 2026 Andrea Bonizzi. Tutti i diritti riservati.
+Vedi il file `LICENSE` per i dettagli. Copia, distribuzione o riutilizzo
+non autorizzati sono vietati.

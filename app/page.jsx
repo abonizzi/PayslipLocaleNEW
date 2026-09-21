@@ -1,8 +1,17 @@
 "use client";
 
+/**
+ * Buste Paga PWA
+ * (c) 2026 Andrea Bonizzi. Tutti i diritti riservati / All Rights Reserved.
+ * Codice proprietario: copia, distribuzione, modifica o riutilizzo non
+ * autorizzati, totali o parziali, sono vietati senza consenso scritto
+ * dell'autore. Vedi il file LICENSE nella radice del progetto.
+ */
+
 import { Wallet, TrendingUp, Coins, ReceiptText } from "lucide-react";
 import UploadCard from "@/components/UploadCard";
 import StatCard from "@/components/StatCard";
+import MaskableAmount from "@/components/MaskableAmount";
 import NettoLordoChart from "@/components/charts/NettoLordoChart";
 import HistoryTable from "@/components/HistoryTable";
 import DetailModal from "@/components/DetailModal";
@@ -10,7 +19,6 @@ import AppHeader from "@/components/AppHeader";
 import EmptyYearState from "@/components/EmptyYearState";
 import { useState } from "react";
 import { usePayslips } from "@/context/PayslipsContext";
-import { formatEuro } from "@/lib/format";
 import { calcLordoMedioMensile, getLatestPayslip } from "@/lib/ral";
 
 export default function Page() {
@@ -40,20 +48,20 @@ export default function Page() {
             <StatCard
               icon={Wallet}
               label="Ultimo netto"
-              value={formatEuro(ultima.netto_in_busta)}
+              value={<MaskableAmount value={ultima.netto_in_busta} />}
               sub={ultima.mese && ultima.anno ? `${ultima.mese}/${ultima.anno}` : null}
             />
             <StatCard
               icon={TrendingUp}
               label="Netto medio"
-              value={formatEuro(nettoMedio)}
+              value={<MaskableAmount value={nettoMedio} />}
               sub={`su ${payslips.length} bust${payslips.length === 1 ? "a" : "e"}`}
               accent="text-good"
             />
             <StatCard
               icon={Coins}
               label="Lordo medio mensile"
-              value={formatEuro(lordoMedio)}
+              value={<MaskableAmount value={lordoMedio} />}
               sub="bonus inclusi"
               accent="text-accent-soft"
             />

@@ -2,6 +2,8 @@
   "name": "buste-paga-pwa-locale",
   "version": "1.0.0",
   "private": true,
+  "author": "Andrea Bonizzi",
+  "license": "UNLICENSED",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

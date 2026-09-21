@@ -1,5 +1,13 @@
 "use client";
 
+/**
+ * Buste Paga PWA
+ * (c) 2026 Andrea Bonizzi. Tutti i diritti riservati / All Rights Reserved.
+ * Codice proprietario: copia, distribuzione, modifica o riutilizzo non
+ * autorizzati, totali o parziali, sono vietati senza consenso scritto
+ * dell'autore. Vedi il file LICENSE nella radice del progetto.
+ */
+
 import { useState } from "react";
 import { X, Gift, Trash2, Loader2 } from "lucide-react";
 import {
@@ -10,6 +18,7 @@ import {
   estraiPremiProduzione,
 } from "@/lib/format";
 import { Section, Row } from "@/components/InfoSection";
+import MaskableAmount from "@/components/MaskableAmount";
 import { usePayslips } from "@/context/PayslipsContext";
 
 export default function DetailModal({ payslip, onClose }) {
@@ -51,12 +60,12 @@ export default function DetailModal({ payslip, onClose }) {
         <div className="grid grid-cols-2 gap-3 mb-4">
           <div className="rounded-xl bg-base-850 border border-base-700 p-3">
             <div className="text-xs text-slate-500">Lordo totale</div>
-            <div className="text-lg font-semibold">{formatEuro(payslip.lordo_totale)}</div>
+            <div className="text-lg font-semibold"><MaskableAmount value={payslip.lordo_totale} /></div>
           </div>
           <div className="rounded-xl bg-base-850 border border-base-700 p-3">
             <div className="text-xs text-slate-500">Netto in busta</div>
             <div className="text-lg font-semibold text-good">
-              {formatEuro(payslip.netto_in_busta)}
+              <MaskableAmount value={payslip.netto_in_busta} />
             </div>
           </div>
         </div>
@@ -64,7 +73,7 @@ export default function DetailModal({ payslip, onClose }) {
         <Section title="Dati orari e contrattuali">
           <Row label="CCNL" value={payslip.ccnl || "—"} />
           <Row label="Livello" value={payslip.livello || "—"} />
-          <Row label="Paga oraria" value={formatEuro(payslip.paga_oraria)} />
+          <Row label="Paga oraria" value={<MaskableAmount value={payslip.paga_oraria} />} />
           <Row label="Ore ordinarie mese" value={payslip.ore_ordinarie_mese ?? "—"} />
           <Row label="Giorni lavorati" value={payslip.giorni_lavorati ?? "—"} />
         </Section>
@@ -79,7 +88,7 @@ export default function DetailModal({ payslip, onClose }) {
                     <Gift className="h-3.5 w-3.5 text-accent-soft" /> {v.descrizione}
                   </span>
                 }
-                value={formatEuro(v.importo_lordo)}
+                value={<MaskableAmount value={v.importo_lordo} />}
               />
             ))}
           </Section>
@@ -88,7 +97,7 @@ export default function DetailModal({ payslip, onClose }) {
         {altreVoci.length > 0 && (
           <Section title="Altre voci variabili">
             {altreVoci.map((v, i) => (
-              <Row key={i} label={v.descrizione} value={formatEuro(v.importo_lordo)} />
+              <Row key={i} label={v.descrizione} value={<MaskableAmount value={v.importo_lordo} />} />
             ))}
           </Section>
         )}
@@ -100,16 +109,16 @@ export default function DetailModal({ payslip, onClose }) {
         </Section>
 
         <Section title="Fisco e contributi">
-          <Row label="Imponibile INPS" value={formatEuro(payslip.imponibile_inps)} />
-          <Row label="Contributi INPS" value={formatEuro(payslip.contributi_inps)} />
-          <Row label="Imponibile IRPEF" value={formatEuro(payslip.imponibile_irpef)} />
-          <Row label="IRPEF lorda" value={formatEuro(payslip.irpef_lorda)} />
-          <Row label="Detrazioni lav. dipendente" value={formatEuro(payslip.detrazioni_lavoro_dipendente)} />
-          <Row label="Ulteriori detrazioni" value={formatEuro(payslip.ulteriori_detrazioni)} />
-          <Row label="IRPEF netta" value={formatEuro(payslip.irpef_netta)} />
-          <Row label="Addizionale regionale" value={formatEuro(payslip.addizionale_regionale)} />
-          <Row label="Addizionale comunale" value={formatEuro(payslip.addizionale_comunale)} />
-          <Row label="Totale trattenute" value={formatEuro(payslip.totale_trattenute)} />
+          <Row label="Imponibile INPS" value={<MaskableAmount value={payslip.imponibile_inps} />} />
+          <Row label="Contributi INPS" value={<MaskableAmount value={payslip.contributi_inps} />} />
+          <Row label="Imponibile IRPEF" value={<MaskableAmount value={payslip.imponibile_irpef} />} />
+          <Row label="IRPEF lorda" value={<MaskableAmount value={payslip.irpef_lorda} />} />
+          <Row label="Detrazioni lav. dipendente" value={<MaskableAmount value={payslip.detrazioni_lavoro_dipendente} />} />
+          <Row label="Ulteriori detrazioni" value={<MaskableAmount value={payslip.ulteriori_detrazioni} />} />
+          <Row label="IRPEF netta" value={<MaskableAmount value={payslip.irpef_netta} />} />
+          <Row label="Addizionale regionale" value={<MaskableAmount value={payslip.addizionale_regionale} />} />
+          <Row label="Addizionale comunale" value={<MaskableAmount value={payslip.addizionale_comunale} />} />
+          <Row label="Totale trattenute" value={<MaskableAmount value={payslip.totale_trattenute} />} />
         </Section>
 
         <Section title="Ferie">
@@ -139,11 +148,11 @@ export default function DetailModal({ payslip, onClose }) {
         </Section>
 
         <Section title="Progressivi e TFR">
-          <Row label="Imponibile INPS progr." value={formatEuro(payslip.imponibile_inps_progressivo)} />
-          <Row label="Imponibile IRPEF progr." value={formatEuro(payslip.imponibile_irpef_progressivo)} />
-          <Row label="IRPEF pagata progr." value={formatEuro(payslip.irpef_pagata_progressiva)} />
-          <Row label="Retribuzione utile TFR" value={formatEuro(payslip.retribuzione_utile_tfr)} />
-          <Row label="TFR trasferito a fondo" value={formatEuro(payslip.tfr_trasferito_fondo)} />
+          <Row label="Imponibile INPS progr." value={<MaskableAmount value={payslip.imponibile_inps_progressivo} />} />
+          <Row label="Imponibile IRPEF progr." value={<MaskableAmount value={payslip.imponibile_irpef_progressivo} />} />
+          <Row label="IRPEF pagata progr." value={<MaskableAmount value={payslip.irpef_pagata_progressiva} />} />
+          <Row label="Retribuzione utile TFR" value={<MaskableAmount value={payslip.retribuzione_utile_tfr} />} />
+          <Row label="TFR trasferito a fondo" value={<MaskableAmount value={payslip.tfr_trasferito_fondo} />} />
         </Section>
 
         {deleteError && (

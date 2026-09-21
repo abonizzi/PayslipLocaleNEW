@@ -1,5 +1,13 @@
 "use client";
 
+/**
+ * Buste Paga PWA
+ * (c) 2026 Andrea Bonizzi. Tutti i diritti riservati / All Rights Reserved.
+ * Codice proprietario: copia, distribuzione, modifica o riutilizzo non
+ * autorizzati, totali o parziali, sono vietati senza consenso scritto
+ * dell'autore. Vedi il file LICENSE nella radice del progetto.
+ */
+
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
@@ -13,6 +21,7 @@ import {
 } from "lucide-react";
 import InstallAppButton from "@/components/InstallAppButton";
 import FeedbackForm from "@/components/FeedbackForm";
+import Tutorial from "@/components/Tutorial";
 import {
   getStoredLayoutPref,
   saveStoredLayoutPref,
@@ -155,6 +164,21 @@ function Section({ title, description, children }) {
   );
 }
 
+function TutorialReviewButton() {
+  const [show, setShow] = useState(false);
+  return (
+    <>
+      <button
+        onClick={() => setShow(true)}
+        className="rounded-xl border border-base-700 text-slate-300 py-2.5 text-sm"
+      >
+        Rivedi tutorial
+      </button>
+      {show && <Tutorial onClose={() => setShow(false)} />}
+    </>
+  );
+}
+
 export default function SettingsPage() {
   return (
     <main className="max-w-md sm:max-w-2xl mx-auto px-4 pb-24 pt-6 flex flex-col gap-6">
@@ -205,6 +229,10 @@ export default function SettingsPage() {
         description="Hai trovato un problema o hai un'idea per migliorare l'app? Scrivicelo qui sotto."
       >
         <FeedbackForm />
+      </Section>
+
+      <Section title="Tutorial" description="Rivedi in qualsiasi momento la breve guida iniziale.">
+        <TutorialReviewButton />
       </Section>
     </main>
   );

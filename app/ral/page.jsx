@@ -1,13 +1,21 @@
 "use client";
 
+/**
+ * Buste Paga PWA
+ * (c) 2026 Andrea Bonizzi. Tutti i diritti riservati / All Rights Reserved.
+ * Codice proprietario: copia, distribuzione, modifica o riutilizzo non
+ * autorizzati, totali o parziali, sono vietati senza consenso scritto
+ * dell'autore. Vedi il file LICENSE nella radice del progetto.
+ */
+
 import Link from "next/link";
 import { TrendingUp, Wallet, Clock, Settings as SettingsIcon } from "lucide-react";
 import AppHeader from "@/components/AppHeader";
 import StatCard from "@/components/StatCard";
 import EmptyYearState from "@/components/EmptyYearState";
 import { Section, Row } from "@/components/InfoSection";
+import MaskableAmount from "@/components/MaskableAmount";
 import { usePayslips } from "@/context/PayslipsContext";
-import { formatEuro } from "@/lib/format";
 import { calcRalReale, calcRalIpotetica, getLatestPayslip } from "@/lib/ral";
 import { useMensilita } from "@/lib/useMensilita";
 
@@ -36,21 +44,21 @@ export default function RalPage() {
             <StatCard
               icon={Wallet}
               label="RAL reale"
-              value={formatEuro(ralReale?.totale)}
+              value={<MaskableAmount value={ralReale?.totale} />}
               sub={`Percepito nel ${ralReale?.anno} (${ralReale?.numBuste} bust${ralReale?.numBuste === 1 ? "a" : "e"})`}
               accent="text-good"
             />
             <StatCard
               icon={TrendingUp}
               label="RAL ipotetica"
-              value={formatEuro(ralIpotetica?.totale)}
+              value={<MaskableAmount value={ralIpotetica?.totale} />}
               sub={`Proiezione ${ralIpotetica?.anno} · ${mensilita} mensilità`}
               accent="text-accent-soft"
             />
             <StatCard
               icon={Clock}
               label="Paga oraria"
-              value={formatEuro(latest.paga_oraria)}
+              value={<MaskableAmount value={latest.paga_oraria} />}
               sub={`Livello ${latest.livello || "—"}`}
             />
           </div>
@@ -59,7 +67,7 @@ export default function RalPage() {
             <Row label="Anno di riferimento" value={ralReale?.anno ?? "—"} />
             <Row label="Buste sommate" value={ralReale?.numBuste ?? "—"} />
             <Row label="Ultimo mese incluso" value={ralReale?.ultimoMese ?? "—"} />
-            <Row label="Totale lordo percepito" value={formatEuro(ralReale?.totale)} />
+            <Row label="Totale lordo percepito" value={<MaskableAmount value={ralReale?.totale} />} />
           </Section>
           <p className="text-xs text-slate-500 -mt-3 px-1">
             Somma del lordo di tutte le buste caricate nell'anno {ralReale?.anno}: cresce man
@@ -67,10 +75,10 @@ export default function RalPage() {
           </p>
 
           <Section title="Come calcoliamo la RAL ipotetica">
-            <Row label="Minimo tabellare + scatti + indennità mansione" value={formatEuro(ralIpotetica?.baseMensile)} />
-            <Row label={`× ${ralIpotetica?.mensilita} mensilità`} value={formatEuro(ralIpotetica?.baseAnnua)} />
-            <Row label="+ Bonus produzione (tranche caricate)" value={formatEuro(ralIpotetica?.bonusProduzione)} />
-            <Row label="Totale proiettato" value={formatEuro(ralIpotetica?.totale)} />
+            <Row label="Minimo tabellare + scatti + indennità mansione" value={<MaskableAmount value={ralIpotetica?.baseMensile} />} />
+            <Row label={`× ${ralIpotetica?.mensilita} mensilità`} value={<MaskableAmount value={ralIpotetica?.baseAnnua} />} />
+            <Row label="+ Bonus produzione (tranche caricate)" value={<MaskableAmount value={ralIpotetica?.bonusProduzione} />} />
+            <Row label="Totale proiettato" value={<MaskableAmount value={ralIpotetica?.totale} />} />
           </Section>
           <p className="text-xs text-slate-500 -mt-3 px-1">
             Proiezione basata sulla retribuzione fissa dell'ultima busta caricata (esclusa

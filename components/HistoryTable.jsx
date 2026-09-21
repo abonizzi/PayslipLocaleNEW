@@ -1,7 +1,16 @@
 "use client";
 
+/**
+ * Buste Paga PWA
+ * (c) 2026 Andrea Bonizzi. Tutti i diritti riservati / All Rights Reserved.
+ * Codice proprietario: copia, distribuzione, modifica o riutilizzo non
+ * autorizzati, totali o parziali, sono vietati senza consenso scritto
+ * dell'autore. Vedi il file LICENSE nella radice del progetto.
+ */
+
 import { ChevronRight, Gift } from "lucide-react";
 import { periodoLabel, formatEuro, estraiPremiProduzione } from "@/lib/format";
+import MaskableAmount from "@/components/MaskableAmount";
 
 export default function HistoryTable({ payslips, onSelect }) {
   if (!payslips || payslips.length === 0) {
@@ -36,11 +45,13 @@ export default function HistoryTable({ payslips, onSelect }) {
                 )}
               </div>
               <div className="text-xs text-slate-400 mt-0.5">
-                Lordo {formatEuro(p.lordo_totale)} · Ticket {formatEuro(p.totale_ticket)}
+                Lordo <MaskableAmount value={p.lordo_totale} /> · Ticket {formatEuro(p.totale_ticket)}
               </div>
             </div>
             <div className="flex items-center gap-2 shrink-0">
-              <span className="font-semibold text-good">{formatEuro(p.netto_in_busta)}</span>
+              <span className="font-semibold text-good">
+                <MaskableAmount value={p.netto_in_busta} />
+              </span>
               <ChevronRight className="h-4 w-4 text-slate-500" />
             </div>
           </button>

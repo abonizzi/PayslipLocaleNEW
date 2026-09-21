@@ -1,12 +1,22 @@
 "use client";
 
+/**
+ * Buste Paga PWA
+ * (c) 2026 Andrea Bonizzi. Tutti i diritti riservati / All Rights Reserved.
+ * Codice proprietario: copia, distribuzione, modifica o riutilizzo non
+ * autorizzati, totali o parziali, sono vietati senza consenso scritto
+ * dell'autore. Vedi il file LICENSE nella radice del progetto.
+ */
+
 import Link from "next/link";
 import { RefreshCw, Settings as SettingsIcon } from "lucide-react";
 import YearMenu from "@/components/YearMenu";
 import { usePayslips } from "@/context/PayslipsContext";
+import { useAmountsVisibility } from "@/context/AmountsVisibilityContext";
 
 export default function AppHeader({ icon: Icon, title, subtitle }) {
   const { reload, loading } = usePayslips();
+  const { hidden, toggle } = useAmountsVisibility();
 
   return (
     <header className="flex items-center justify-between gap-2">
@@ -24,6 +34,14 @@ export default function AppHeader({ icon: Icon, title, subtitle }) {
 
       <div className="flex items-center gap-2 shrink-0">
         <YearMenu />
+        <button
+          onClick={toggle}
+          className="p-2 rounded-full border border-base-700 active:bg-base-800 text-base leading-none"
+          aria-label={hidden ? "Mostra importi" : "Nascondi importi"}
+          title={hidden ? "Mostra importi" : "Nascondi importi"}
+        >
+          {hidden ? "🙈" : "👁️"}
+        </button>
         <button
           onClick={reload}
           className="p-2 rounded-full border border-base-700 active:bg-base-800"

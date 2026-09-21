@@ -1,5 +1,13 @@
 "use client";
 
+/**
+ * Buste Paga PWA
+ * (c) 2026 Andrea Bonizzi. Tutti i diritti riservati / All Rights Reserved.
+ * Codice proprietario: copia, distribuzione, modifica o riutilizzo non
+ * autorizzati, totali o parziali, sono vietati senza consenso scritto
+ * dell'autore. Vedi il file LICENSE nella radice del progetto.
+ */
+
 import {
   ResponsiveContainer,
   BarChart,
@@ -53,7 +61,7 @@ export default function RateiBarChart({ latestPayslip }) {
           <CartesianGrid stroke="#1c2430" vertical={false} />
           <XAxis dataKey="voce" tick={{ fill: "#94a3b8", fontSize: 11 }} />
           <YAxis tick={{ fill: "#94a3b8", fontSize: 11 }} />
-          <Tooltip contentStyle={TOOLTIP_STYLE} formatter={(value) => formatOre(value)} />
+          <Tooltip contentStyle={TOOLTIP_STYLE} cursor={{ fill: "rgba(255,255,255,0.06)" }} formatter={(value) => formatOre(value)} />
           <Legend wrapperStyle={{ fontSize: 12 }} />
           <Bar dataKey="Maturato" fill="#67e8f9" radius={[4, 4, 0, 0]} />
           <Bar dataKey="Goduto" fill="#fbbf24" radius={[4, 4, 0, 0]} />

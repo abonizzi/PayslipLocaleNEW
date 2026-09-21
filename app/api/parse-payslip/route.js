@@ -1,3 +1,11 @@
+/**
+ * Buste Paga PWA
+ * (c) 2026 Andrea Bonizzi. Tutti i diritti riservati / All Rights Reserved.
+ * Codice proprietario: copia, distribuzione, modifica o riutilizzo non
+ * autorizzati, totali o parziali, sono vietati senza consenso scritto
+ * dell'autore. Vedi il file LICENSE nella radice del progetto.
+ */
+
 // Su Netlify questa route diventa una Netlify Function (Next.js App Router
 // è supportato nativamente da @netlify/plugin-nextjs, vedi netlify.toml).
 export const runtime = "nodejs";
@@ -134,6 +142,20 @@ export async function POST(request) {
 
     if (!geminiRes.ok) {
       const apiMessage = geminiData?.error?.message || "Errore sconosciuto dall'API Gemini.";
+      const isRateLimit =
+        geminiRes.status === 429 || /resource_exhausted|quota/i.test(apiMessage);
+
+      if (isRateLimit) {
+        return Response.json(
+          {
+            error:
+              "Hai raggiunto il limite giornaliero di richieste gratuite di Gemini. Riprova dopo le 9:00 (ora italiana), quando il limite si azzera.",
+            code: "RATE_LIMIT",
+          },
+          { status: 429 }
+        );
+      }
+
       return Response.json(
         { error: `Estrazione AI fallita (Gemini): ${apiMessage}` },
         { status: geminiRes.status }

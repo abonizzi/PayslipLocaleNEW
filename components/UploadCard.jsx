@@ -1,5 +1,13 @@
 "use client";
 
+/**
+ * Buste Paga PWA
+ * (c) 2026 Andrea Bonizzi. Tutti i diritti riservati / All Rights Reserved.
+ * Codice proprietario: copia, distribuzione, modifica o riutilizzo non
+ * autorizzati, totali o parziali, sono vietati senza consenso scritto
+ * dell'autore. Vedi il file LICENSE nella radice del progetto.
+ */
+
 import { useRef, useState } from "react";
 import { FileText, Image as ImageIcon, Loader2, CheckCircle2, XCircle } from "lucide-react";
 import { mapParsedToRow } from "@/lib/mapPayslip";
@@ -33,7 +41,9 @@ export default function UploadCard() {
     });
     const data = await res.json();
     if (!res.ok) {
-      throw new Error(data.error || "estrazione AI fallita");
+      const err = new Error(data.error || "estrazione AI fallita");
+      err.code = data.code;
+      throw err;
     }
 
     const row = mapParsedToRow(data.parsed, {
@@ -53,19 +63,33 @@ export default function UploadCard() {
     setProgress({ total: files.length, done: 0, currentName: files[0].name });
 
     const errori = [];
+    let rateLimited = false;
+    let attempted = 0;
     for (let i = 0; i < files.length; i++) {
+      if (rateLimited) break; // il limite non si azzera durante il ciclo, inutile riprovare
       const file = files[i];
+      attempted++;
       setProgress((p) => ({ ...p, currentName: file.name }));
       try {
         await processSingleFile(file);
       } catch (err) {
         errori.push({ name: file.name, message: err.message });
+        if (err.code === "RATE_LIMIT") rateLimited = true;
       }
       setProgress((p) => ({ ...p, done: p.done + 1 }));
     }
 
-    const successi = files.length - errori.length;
-    if (errori.length === 0) {
+    const nonTentati = files.length - attempted;
+    const successi = attempted - errori.length;
+
+    if (rateLimited) {
+      setStatus("error");
+      setMessage(
+        `${successi} di ${files.length} caricate. Limite giornaliero Gemini raggiunto` +
+          (nonTentati > 0 ? ` (${nonTentati} in attesa)` : "") +
+          `: riprova dopo le 9:00 (ora italiana).`
+      );
+    } else if (errori.length === 0) {
       setStatus("success");
       setMessage(
         files.length === 1

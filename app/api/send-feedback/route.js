@@ -1,3 +1,11 @@
+/**
+ * Buste Paga PWA
+ * (c) 2026 Andrea Bonizzi. Tutti i diritti riservati / All Rights Reserved.
+ * Codice proprietario: copia, distribuzione, modifica o riutilizzo non
+ * autorizzati, totali o parziali, sono vietati senza consenso scritto
+ * dell'autore. Vedi il file LICENSE nella radice del progetto.
+ */
+
 // Invia le segnalazioni scritte dagli utenti nelle Impostazioni all'indirizzo
 // email del gestore dell'app, tramite l'API di Resend (servizio esterno di
 // invio email, con una fascia gratuita generosa). La chiave RESEND_API_KEY
